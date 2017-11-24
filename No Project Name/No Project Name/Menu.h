@@ -12,9 +12,11 @@ class Menu
 {
 private:
 	Font font;
+	RenderWindow *window;
+	Engine::gameState state;
 public:
 	Menu();
-	Menu(RenderWindow &window, Engine::gameState state);
+	Menu(RenderWindow &window, Engine::gameState &state);
 	~Menu();
 	Engine::gameState Run();
 };
