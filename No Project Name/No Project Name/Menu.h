@@ -14,7 +14,7 @@ class Menu
 private:
 	Font font;
 	RenderWindow *window;
-	int state;
+	int* state;
 public:
 	Menu();
 	Menu(RenderWindow &window, int &state);

@@ -10,7 +10,7 @@ Menu::Menu(RenderWindow &window, int &state)
 {
 	state = Engine::gameState::EXIT;
 
-	if (!font.loadFromFile("Resources/Pixeled.tff"))
+	if (!font.loadFromFile("Resources/Pixeled.ttf"))
 	{
 		MessageBox(NULL, TEXT("Font not found!"), TEXT("ERROR"), NULL);
 		return;
@@ -20,7 +20,7 @@ Menu::Menu(RenderWindow &window, int &state)
 
 	state = Engine::gameState::MENU;
 
-	this->state = state;
+	this->state = &state;
 }
 
 Menu::~Menu()
@@ -48,7 +48,7 @@ void Menu::Run()
 		texts[i].setPosition(1280 / 2 - texts[i].getGlobalBounds().width / 2, 250 + i * 120);
 	}
 
-	while (state == Engine::gameState::MENU)
+	while (*state == Engine::gameState::MENU)
 	{
 		Vector2f mouse(Mouse::getPosition(*window));
 		Event event;
@@ -57,12 +57,17 @@ void Menu::Run()
 		{
 			if (event.type == Event::Closed || event.type == Event::KeyPressed &&
 				event.key.code == Keyboard::Escape)
-				state = Engine::gameState::EXIT;
+				*state = Engine::gameState::EXIT;
 
 			else if (texts[1].getGlobalBounds().contains(mouse) &&
 				event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
 			{
-				state = Engine::gameState::EXIT;
+				*state = Engine::gameState::EXIT;
+			}
+			else if (texts[0].getGlobalBounds().contains(mouse) &&
+				event.type == Event::MouseButtonReleased && event.key.code == Mouse::Left)
+			{
+				*state = Engine::gameState::GAME;
 			}
 		}
 		for (int i = 0; i < options; i++)
@@ -74,7 +79,7 @@ void Menu::Run()
 
 			window->draw(title);
 			for (int i = 0; i < options; i++)
-				window->draw(texts[i]);
+			window->draw(texts[i]);
 
 			window->display();
 	}
