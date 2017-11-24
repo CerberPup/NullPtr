@@ -8,15 +8,16 @@
 using namespace sf;
 using namespace std;
 
+
 class Menu
 {
 private:
 	Font font;
 	RenderWindow *window;
-	Engine::gameState state;
+	int state;
 public:
 	Menu();
-	Menu(RenderWindow &window, Engine::gameState &state);
+	Menu(RenderWindow &window, int &state);
 	~Menu();
-	Engine::gameState Run();
+	void Run();
 };

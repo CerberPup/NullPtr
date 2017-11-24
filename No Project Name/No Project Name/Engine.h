@@ -6,15 +6,14 @@ class Engine
 {
 private:
 	sf::RenderWindow window;
-	Menu menu;
 	bool running;
 public:
 	enum gameState {
-		Game,
-		Menu,
-		Exit
+		GAME,
+		MENU,
+		EXIT
 	};
-	gameState state;
+	int state;
 	Engine();
 	~Engine();
 	void run();

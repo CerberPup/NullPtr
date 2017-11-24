@@ -5,7 +5,8 @@
 Engine::Engine()
 {
 	window.create(sf::VideoMode(200, 200), "SFML works!");
-	state = gameState::Menu;
+	window.setFramerateLimit(60);
+	state = gameState::MENU;
 }
 
 
@@ -14,15 +15,16 @@ Engine::~Engine()
 }
 
 void Engine::run() {
-
-	while (state != gameState::Exit) {
+	Menu menu(window, state);
+	while (state != gameState::EXIT) {
 		switch (state)
 		{
-		case gameState::Game:
-				
+		case gameState::GAME:
+			
 			break;
-		case gameState::Menu:
-			//state = menu.Run(window);
+		case gameState::MENU:
+			menu.Run();
+
 			break;
 		default:
 			break;
