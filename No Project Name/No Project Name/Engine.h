@@ -1,9 +1,11 @@
 #pragma once
 #include "Menu.h"
+#include <SFML/Graphics.hpp>
 
 class Engine
 {
 private:
+	sf::RenderWindow window;
 	Menu menu;
 	bool running;
 public:
