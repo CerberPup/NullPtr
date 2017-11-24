@@ -4,10 +4,8 @@
 
 Engine::Engine()
 {
-	const HWND hDesktop = GetDesktopWindow();
-	RECT ResolutionRect;
-	GetWindowRect(hDesktop, &ResolutionRect);
-	window.create(sf::VideoMode(ResolutionRect.right,ResolutionRect.bottom), "SFML works!", sf::Style::Fullscreen);
+	window.create(sf::VideoMode(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), "SFML works!", sf::Style::Fullscreen);
+	window.setPosition(Vector2i(0, 0));
 	window.setFramerateLimit(60);
 	state = gameState::MENU;
 }
