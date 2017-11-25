@@ -5,6 +5,8 @@
 class Engine
 {
 private:
+	char** arrr;
+	int arg;
 	sf::RenderWindow window;
 	bool running;
 public:
@@ -14,7 +16,8 @@ public:
 		EXIT
 	};
 	int state;
-	Engine();
+	Engine(int argc, char *argv[]);
+	
 	~Engine();
 	void run();
 };

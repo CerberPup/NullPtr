@@ -22,6 +22,7 @@ private:
 	float delta;
 public:
 	Game(RenderWindow &window, int &state);
-	void Run();
+	void Run(int argc, char* argv[]);
+	int Pyth(char* file, char* function, char* arg1, char* arg2, char* arg3);
 	~Game();
 };
