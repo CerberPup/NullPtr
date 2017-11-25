@@ -8,7 +8,8 @@ Game::Game(RenderWindow &window, int &state)
 {
 	this->window = &window;
 	this->state = &state;
-
+	wonsz.setPosition(Vector2f(200,408));
+	wonsz.direction = false;
 	textBack.loadFromFile("Resources/City.png");
 	textBack.setRepeated(true);
 	spriteBack.setTexture(textBack);
@@ -17,7 +18,7 @@ Game::Game(RenderWindow &window, int &state)
 	clock.restart();
 }
 
-int Game::Pyth(char* file, char* function, char* arg1, char* arg2, char* arg3)
+int Game::Pyth(char* file, char* function, char* arg1, char* arg2, char* arg3=NULL)
 {
 	char *argv[] = { "", file,function,arg1,arg2,arg3, NULL };
 	int argc = sizeof(argv) / sizeof(char*) - 1;
@@ -90,7 +91,8 @@ int Game::Pyth(char* file, char* function, char* arg1, char* arg2, char* arg3)
 
 void Game::Run(int argc, char* argv[])
 {
-	Pyth(argc, argv);
+	//Pyth(argc, argv);
+	
 	int posX = 0;
 	map = new Map(*window);
 	while (*state == Engine::gameState::GAME)
@@ -150,6 +152,11 @@ void Game::Run(int argc, char* argv[])
 		}
 		spriteBack.setTextureRect(IntRect(posX, 0, 1920, 1080));
 
+		if (player.sprite.getPosition().x > 520) {
+			*state = Engine::MENU;
+		}
+		//cout << player.sprite.getPosition().x<<endl;
+
 		//Player rotates 15
 		Time elapsed = clockphysic.getElapsedTime();
 		clockphysic.restart();
@@ -157,6 +164,7 @@ void Game::Run(int argc, char* argv[])
 
 		if (clock.getElapsedTime() > milliseconds(100))
 		{
+			wonsz.update();
 			player.update();
 			clock.restart();
 		}
@@ -165,11 +173,10 @@ void Game::Run(int argc, char* argv[])
 		window->draw(spriteBack);
 
 		map->Display(posX / 32);
-
+		
 		window->draw(player);
+		window->draw(wonsz);
 		window->display();
-
-		clock.restart();
 	}
 }
 

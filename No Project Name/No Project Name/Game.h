@@ -4,11 +4,13 @@
 #include "Engine.h"
 #include "Tile.h"
 #include "Player.h"
+#include "Zaskroniec.h"
 
 class Game
 {
 private:
 	RenderWindow *window;
+	Zaskroniec wonsz;
 	int* state;
 	Texture textBack;
 	Sprite spriteBack;
