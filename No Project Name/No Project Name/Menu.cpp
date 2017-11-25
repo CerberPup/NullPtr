@@ -21,6 +21,8 @@ Menu::Menu(RenderWindow &window, int &state)
 	state = Engine::gameState::MENU;
 
 	this->state = &state;
+
+	size = window.getSize();
 }
 
 Menu::~Menu()
@@ -32,7 +34,7 @@ void Menu::Run()
 {
 	Text title("There is no title", font, 80);
 	title.setStyle(Text::Bold);
-	title.setPosition(1280 / 2 - title.getGlobalBounds().width / 2, 20);
+	title.setPosition( size.x / 2 - title.getGlobalBounds().width / 2, 20);
 
 	const short int options = 2;
 
@@ -45,7 +47,7 @@ void Menu::Run()
 		texts[i].setCharacterSize(65);
 
 		texts[i].setString(str[i]);
-		texts[i].setPosition(1280 / 2 - texts[i].getGlobalBounds().width / 2, 250 + i * 120);
+		texts[i].setPosition(size.x / 2 - texts[i].getGlobalBounds().width / 2, 350 + i * 120);
 	}
 
 	while (*state == Engine::gameState::MENU)
