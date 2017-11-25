@@ -29,49 +29,50 @@ void Game::Run()
 			if (event.type == Event::Closed || event.type == Event::KeyPressed &&
 				event.key.code == Keyboard::Escape)
 				*state = Engine::gameState::EXIT;
-			if (Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W))
-			{
-				if (player.onground) {
-					player.onground = false;
-					player.animation = Player::JUMP;
-					player.velocity.y = -1000;
-				}
+			
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W))
+		{
+			if (player.onground) {
+				player.onground = false;
+				player.animation = Player::JUMP;
+				player.velocity.y = -1000;
 			}
-			if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A))
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A))
+		{
+			/*if (player.sprite.getPosition().x > 0) {
+			if (player.onground)
+			player.animation = Player::LEFT;
+			if (player.velocity.x > -200)
+			player.velocity.x -= 50;*/
+			if (posX > 0)
 			{
-				if (player.sprite.getPosition().x > 0) {
-					if (player.onground)
-						player.animation = Player::LEFT;
-					if (player.velocity.x > -200)
-						player.velocity.x -= 50;
-					if (posX > 0)
-					{
-						posX -= 10;
-						map->Reposition(1);
-					}
-				}
-				else {
-					player.sprite.setPosition(0, player.sprite.getPosition().y);
-				}
-				//Player goes Left/Player stops/Player slows down
+				posX -= 10;
+				map->Reposition(1);
 			}
-			if (Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D))
+			/*}
+			else {
+			player.sprite.setPosition(0, player.sprite.getPosition().y);
+			}*/
+			//Player goes Left/Player stops/Player slows down
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D))
+		{
+			/*if (player.sprite.getPosition().x < 1300) {
+			if (player.velocity.x < 200)
+			player.velocity.x += 50;
+			if (player.onground)
+			player.animation = Player::RIGHT;
+			}
+			else {
+			player.sprite.setPosition(1300, player.sprite.getPosition().y);
+			}*/
+			//Player goes Right/Player speeds up
+			if (posX < 5000)
 			{
-				if (player.sprite.getPosition().x < 1080) {
-					if (player.velocity.x < 200)
-						player.velocity.x += 50;
-					if (player.onground)
-						player.animation = Player::RIGHT;
-				}
-				else {
-					player.sprite.setPosition(0, player.sprite.getPosition().y);
-				}
-				//Player goes Right/Player speeds up
-				if (posX < 480)
-				{
-					posX += 10;
-					map->Reposition(-1);
-				}
+				posX += 10;
+				map->Reposition(-1);
 			}
 		}
 		spriteBack.setTextureRect(IntRect(posX, 0, 1920, 1080));
