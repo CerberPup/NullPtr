@@ -44,7 +44,7 @@ void Game::Run()
 		}
 		else if (Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D))
 		{
-			if (posX < 480)
+			if (posX < 2000)
 			{
 				posX += 10;
 				map->Reposition(-1);
@@ -62,7 +62,7 @@ void Game::Run()
 
 		window->draw(spriteBack);
 
-		map->Display(posX/32);
+		map->Display(posX/16);
 
 		window->display();
 
