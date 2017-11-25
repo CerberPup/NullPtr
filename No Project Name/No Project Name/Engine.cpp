@@ -5,7 +5,7 @@
 
 Engine::Engine(int argc,char *argv[])
 {
-	window.create(sf::VideoMode(1300, 732), "SFML works!");
+	window.create(sf::VideoMode(1300, 732), "No Title");
 	window.setPosition(Vector2i(0, 0));
 	window.setFramerateLimit(60);
 	state = gameState::MENU;

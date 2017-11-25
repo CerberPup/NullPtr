@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Game.h"
+#include <string>
 #include <iostream>
 #include <python.h>
 
@@ -17,9 +18,9 @@ Game::Game(RenderWindow &window, int &state)
 	clock.restart();
 }
 
-int Game::Pyth(char* file, char* function, char* arg1, char* arg2, char* arg3)
+long int Game::Pyth(char* file, char* function, char* arg1, char* arg2)
 {
-	char *argv[] = { "", file,function,arg1,arg2,arg3, NULL };
+	char *argv[] = { "", file,function,arg1,arg2, NULL };
 	int argc = sizeof(argv) / sizeof(char*) - 1;
 
 	PyObject *pName, *pModule, *pDict, *pFunc;
@@ -60,6 +61,7 @@ int Game::Pyth(char* file, char* function, char* arg1, char* arg2, char* arg3)
 			if (pValue != NULL) {
 				printf("Result of call: %ld\n", PyLong_AsLong(pValue));
 				Py_DECREF(pValue);
+				return (long int) PyLong_AsLong(pValue);
 			}
 			else {
 				Py_DECREF(pFunc);
@@ -90,7 +92,13 @@ int Game::Pyth(char* file, char* function, char* arg1, char* arg2, char* arg3)
 
 void Game::Run(int argc, char* argv[])
 {
-	Pyth(argc, argv);
+	bool wellDone;
+	GiveScript();
+	if (Pyth("py", "multiply", "5", "4") == Pyth("script", "multiply", "5", "4"))
+		wellDone = true;
+	else
+		wellDone = false;
+	
 	int posX = 0;
 	map = new Map(*window);
 	while (*state == Engine::gameState::GAME)
@@ -151,7 +159,6 @@ void Game::Run(int argc, char* argv[])
 		}
 		spriteBack.setTextureRect(IntRect(posX, 0, 1920, 1080));
 
-		//Player rotates 15
 		Time elapsed = clockphysic.getElapsedTime();
 		clockphysic.restart();
 		player.physic(elapsed.asSeconds());
@@ -172,6 +179,52 @@ void Game::Run(int argc, char* argv[])
 
 		clock.restart();
 	}
+}
+
+void Game::GiveScript()
+{
+	fstream script;
+	script.open("script.py", ios::out);
+
+	RenderWindow newWindow;
+	newWindow.create(sf::VideoMode(800, 500), "Type your script here!");
+	newWindow.setPosition(Vector2i(100, 50));
+	newWindow.setFramerateLimit(60);
+
+	Font scriptFont;
+	scriptFont.loadFromFile("Resources/Arial.ttf");
+	std::string output = "#Write script in Python\n#with \"multiply\" function\n#that will multiply 2 given numbers\n#Press End to finish\n\n";
+	Text text(output, scriptFont, 20);
+	text.setPosition(10, 10);
+	text.setStyle(sf::Text::Bold);
+	text.setFillColor(sf::Color::White);
+	Event event;
+	while (!Keyboard::isKeyPressed(Keyboard::End))
+	{
+		while (newWindow.pollEvent(event))
+		{
+			if (event.type == sf::Event::TextEntered)
+			{
+				if (event.text.unicode != 8)
+					output += (char)event.text.unicode;
+				if (event.text.unicode == 8)
+					output = output.substr(0, output.length() - 1);
+				if (event.text.unicode == 13)
+				{
+					output = output.substr(0, output.length() - 1);
+					output += "\n";
+				}
+			}
+		}
+		text.setString(output);
+		newWindow.clear();
+		newWindow.draw(text);
+		newWindow.display();
+	}
+	newWindow.close();
+	script << output;
+	script.flush();
+	script.close();
 }
 
 Game::~Game()
