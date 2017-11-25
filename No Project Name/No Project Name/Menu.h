@@ -15,6 +15,7 @@ private:
 	Font font;
 	RenderWindow *window;
 	int* state;
+	Vector2u size;
 public:
 	Menu();
 	Menu(RenderWindow &window, int &state);

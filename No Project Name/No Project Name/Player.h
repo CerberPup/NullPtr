@@ -5,7 +5,7 @@ class Player: public sf::Transformable, public sf::Drawable
 private:
 	sf::Sprite sprite;
 	sf::Texture texture;
-	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
+	//virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 public:
 	Player();
 	~Player();
