@@ -2,20 +2,18 @@
 #include "SFML/Graphics.hpp"
 
 using namespace sf;
+using namespace std;
 
 class Tile: public sf::Drawable, public sf::Transformable
 {
 private:
-	Sprite sprite;
 	Texture texture;
-	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const
-	{
-		target.draw(sprite);
-	}
+	Sprite sprite;
+	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 public:
+
 	Tile();
-	Tile(Image image);
-	void SetPosition(Vector2f pos);
+	Tile(Image image, IntRect rect);
 	~Tile();
 };
 

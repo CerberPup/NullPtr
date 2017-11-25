@@ -1,17 +1,17 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <vector>
+
+#include "Map.h"
 #include "Engine.h"
-#include "Tile.h"
 
 class Game
 {
 private:
 	RenderWindow *window;
 	int* state;
+	Texture textBack;
+	Sprite spriteBack;
 	Clock clock;
-	Image image;
-	vector<Tile*> tiles;
+	Map* map;
 public:
 	Game(RenderWindow &window, int &state);
 	void Initialize();

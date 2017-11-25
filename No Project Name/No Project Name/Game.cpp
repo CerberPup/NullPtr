@@ -6,19 +6,18 @@ Game::Game(RenderWindow &window, int &state)
 {
 	this->window = &window;
 	this->state = &state;
-	image.loadFromFile("Resources/Tiles.png");
-	Tile *tmp;
-	for (int i = 0; i < 16; i++)
-	{
-		tmp = new Tile(image);
-		tmp->SetPosition(Vector2f(i * 64, 300));
-		tiles.push_back(tmp);
-	}
+
+	textBack.loadFromFile("Resources/City.png");
+	textBack.setRepeated(true);
+	spriteBack.setTexture(textBack);
+	spriteBack.scale(1.2, 1.3);
 	clock.restart();
 }
 
 void Game::Run()
 {
+	int posX = 0;
+	map = new Map(*window);
 	while (*state == Engine::gameState::GAME)
 	{
 		Vector2f mouse(Mouse::getPosition(*window));
@@ -29,23 +28,30 @@ void Game::Run()
 			if (event.type == Event::Closed || event.type == Event::KeyPressed &&
 				event.key.code == Keyboard::Escape)
 				*state = Engine::gameState::EXIT;
-			else if (event.type == Event::KeyPressed && (event.key.code == Keyboard::W || event.key.code == Keyboard::Up))
+			
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W))
+		{
+			//Player jumps
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A))
+		{
+			if (posX > 0)
 			{
-				//Player jumps
+				posX -= 10;
+				map->Reposition(1);
 			}
-			else if (event.type == Event::KeyPressed && (event.key.code == Keyboard::A || event.key.code == Keyboard::Left))
+		}
+		else if (Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D))
+		{
+			if (posX < 480)
 			{
-				//Player goes Left/Player stops/Player slows down
-			}
-			else if (event.type == Event::KeyPressed && (event.key.code == Keyboard::D || event.key.code == Keyboard::Right))
-			{
-				//Player goes Right/Player speeds up
+				posX += 10;
+				map->Reposition(-1);
 			}
 		}
 
-		//Player rotates 15 
-
-		
+		spriteBack.setTextureRect(IntRect(posX, 0, 1920, 1080));	
 
 		while (clock.getElapsedTime() < milliseconds(30))
 		{
@@ -54,14 +60,14 @@ void Game::Run()
 
 		window->clear();
 
-		for (int i = 0; i < 16; i++)
-		{
-			window->draw(*tiles.at(i));
-		}
+		window->draw(spriteBack);
+
+		map->Display(posX/32);
 
 		window->display();
 
 		clock.restart();
+
 	}
 }
 
