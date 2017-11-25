@@ -6,12 +6,21 @@ using namespace std;
 class Player: public sf::Transformable, public sf::Drawable
 {
 private:
-	vector<RectangleShape> vec;
-	Sprite sprite;
+	Vector2f gravity;
+	Vector2f pos;
+	int animationcounter;
 	Texture texture;
 	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 public:
-	void update(float angle);
+	void physic(float delta);
+	int animation;
+	bool onground;
+	Vector2f velocity;
+	enum move {
+		LEFT,RIGHT,JUMP
+	};
+	Sprite sprite;
+	void update();
 	Player();
 	~Player();
 };
