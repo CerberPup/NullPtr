@@ -4,7 +4,7 @@
 using namespace sf;
 using namespace std;
 
-class Tile: public sf::Drawable, public sf::Transformable
+class Tile : public sf::Drawable, public sf::Transformable
 {
 private:
 	Texture texture;
@@ -16,4 +16,3 @@ public:
 	Tile(Image image, IntRect rect);
 	~Tile();
 };
-

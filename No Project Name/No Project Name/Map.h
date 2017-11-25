@@ -9,7 +9,6 @@
 #include <string.h>
 #include "Tile.h"
 
-
 class Map
 {
 private:
@@ -27,4 +26,3 @@ public:
 	void Reposition(int side);
 	~Map();
 };
-

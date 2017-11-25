@@ -5,12 +5,11 @@
 
 Engine::Engine()
 {
-	window.create(sf::VideoMode(GetSystemMetrics(SM_CXSCREEN), GetSystemMetrics(SM_CYSCREEN)), "SFML works!");
+	window.create(sf::VideoMode(1300, 732), "SFML works!");
 	window.setPosition(Vector2i(0, 0));
 	window.setFramerateLimit(60);
 	state = gameState::MENU;
 }
-
 
 Engine::~Engine()
 {
@@ -23,7 +22,6 @@ void Engine::run() {
 		switch (state)
 		{
 		case gameState::GAME:
-			game.Initialize();
 			game.Run();
 			state = gameState::EXIT;
 			break;

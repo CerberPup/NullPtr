@@ -18,10 +18,10 @@ private:
 	Player player;
 	vector<Tile*> tiles;
 	Map* map;
+	Vector2f velocity;
+	float delta;
 public:
 	Game(RenderWindow &window, int &state);
-	void Initialize();
 	void Run();
 	~Game();
 };
-

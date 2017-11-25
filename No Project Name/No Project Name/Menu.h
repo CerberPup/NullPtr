@@ -8,7 +8,6 @@
 using namespace sf;
 using namespace std;
 
-
 class Menu
 {
 private:

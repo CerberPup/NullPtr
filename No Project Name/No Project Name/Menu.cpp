@@ -3,7 +3,6 @@
 
 Menu::Menu()
 {
-	
 }
 
 Menu::Menu(RenderWindow &window, int &state)
@@ -27,14 +26,13 @@ Menu::Menu(RenderWindow &window, int &state)
 
 Menu::~Menu()
 {
-
 }
 
-void Menu::Run() 
+void Menu::Run()
 {
 	Text title("There is no title", font, 80);
 	title.setStyle(Text::Bold);
-	title.setPosition( size.x / 2 - title.getGlobalBounds().width / 2, 20);
+	title.setPosition(size.x / 2 - title.getGlobalBounds().width / 2, 20);
 
 	const short int options = 2;
 
@@ -81,7 +79,7 @@ void Menu::Run()
 
 			window->draw(title);
 			for (int i = 0; i < options; i++)
-			window->draw(texts[i]);
+				window->draw(texts[i]);
 
 			window->display();
 	}

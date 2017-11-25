@@ -3,7 +3,7 @@
 
 using namespace sf;
 using namespace std;
-class Player: public sf::Transformable, public sf::Drawable
+class Player : public sf::Transformable, public sf::Drawable
 {
 private:
 	Vector2f gravity;
@@ -17,7 +17,7 @@ public:
 	bool onground;
 	Vector2f velocity;
 	enum move {
-		LEFT,RIGHT,JUMP
+		LEFT, RIGHT, JUMP
 	};
 	Sprite sprite;
 	void update();

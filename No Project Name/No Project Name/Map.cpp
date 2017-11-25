@@ -33,7 +33,6 @@ Map::Map(RenderWindow &window)
 			if (number == 1)
 			{
 				rect = IntRect(128, 32, 16, 16);
-
 			}
 
 			if (number == 9)
@@ -78,12 +77,11 @@ Map::Map(RenderWindow &window)
 
 void Map::Display(int start)
 {
-
 	for (int i = 0; i < 24; i++)
 	{
-		for (int j = start; j < start + 48; j++)
+		for (int j = start; j < start + 64; j++)
 		{
-			if(mapTiles[i].at(j) != NULL)
+			if (mapTiles[i].at(j) != NULL)
 				window->draw(*mapTiles[i].at(j));
 		}
 	}
@@ -99,7 +97,7 @@ void Map::Reposition(int side)
 			if (tile != NULL)
 			{
 				position = tile->getPosition();
-				position.x += 10*side;
+				position.x += 10 * side;
 				tile->setPosition(position);
 			}
 		}
