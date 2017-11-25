@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "Game.h"
+#include <string>
 #include <iostream>
 #include <python.h>
 
@@ -18,9 +19,9 @@ Game::Game(RenderWindow &window, int &state)
 	clock.restart();
 }
 
-int Game::Pyth(char* file, char* function, char* arg1, char* arg2, char* arg3=NULL)
+long int Game::Pyth(char* file, char* function, char* arg1, char* arg2)
 {
-	char *argv[] = { "", file,function,arg1,arg2,arg3, NULL };
+	char *argv[] = { "", file,function,arg1,arg2, NULL };
 	int argc = sizeof(argv) / sizeof(char*) - 1;
 
 	PyObject *pName, *pModule, *pDict, *pFunc;
@@ -61,6 +62,7 @@ int Game::Pyth(char* file, char* function, char* arg1, char* arg2, char* arg3=NU
 			if (pValue != NULL) {
 				printf("Result of call: %ld\n", PyLong_AsLong(pValue));
 				Py_DECREF(pValue);
+				return (long int) PyLong_AsLong(pValue);
 			}
 			else {
 				Py_DECREF(pFunc);
@@ -91,8 +93,6 @@ int Game::Pyth(char* file, char* function, char* arg1, char* arg2, char* arg3=NU
 
 void Game::Run(int argc, char* argv[])
 {
-	//Pyth(argc, argv);
-	
 	int posX = 0;
 	map = new Map(*window);
 	while (*state == Engine::gameState::GAME)
@@ -105,55 +105,63 @@ void Game::Run(int argc, char* argv[])
 			if (event.type == Event::Closed || event.type == Event::KeyPressed &&
 				event.key.code == Keyboard::Escape)
 				*state = Engine::gameState::EXIT;
-			if (Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W))
-			{
-				if (player.onground) {
-					player.onground = false;
-					player.animation = Player::JUMP;
-					player.velocity.y = -1000;
-				}
+			
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Up) || Keyboard::isKeyPressed(Keyboard::W))
+		{
+			if (player.onground) {
+				player.onground = false;
+				player.animation = Player::JUMP;
+				player.velocity.y = -1000;
 			}
-			if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A))
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A))
+		{
+			if (player.sprite.getPosition().x > 0) {
+			if (player.onground)
+			player.animation = Player::LEFT;
+			if (player.velocity.x > -200)
+			player.velocity.x -= 50;
+			if (posX > 0)
 			{
-				if (player.sprite.getPosition().x > 0) {
-					if (player.onground)
-						player.animation = Player::LEFT;
-					if (player.velocity.x > -200)
-						player.velocity.x -= 50;
-					if (posX > 0)
-					{
-						posX -= 10;
-						map->Reposition(1);
-					}
-				}
-				else {
-					player.sprite.setPosition(0, player.sprite.getPosition().y);
-				}
-				//Player goes Left/Player stops/Player slows down
+				posX -= 10;
+				map->Reposition(1);
 			}
-			if (Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D))
+			}
+			else {
+			player.sprite.setPosition(0, player.sprite.getPosition().y);
+			}
+			//Player goes Left/Player stops/Player slows down
+		}
+		if (Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D))
+		{
+			if (player.sprite.getPosition().x < 1300) {
+			if (player.velocity.x < 200)
+			player.velocity.x += 50;
+			if (player.onground)
+			player.animation = Player::RIGHT;
+			}
+			else {
+			player.sprite.setPosition(1300, player.sprite.getPosition().y);
+			}
+			if (posX < 5000)
 			{
-				if (player.sprite.getPosition().x < 1080) {
-					if (player.velocity.x < 200)
-						player.velocity.x += 50;
-					if (player.onground)
-						player.animation = Player::RIGHT;
-				}
-				else {
-					player.sprite.setPosition(0, player.sprite.getPosition().y);
-				}
-				//Player goes Right/Player speeds up
-				if (posX < 480)
-				{
-					posX += 10;
-					map->Reposition(-1);
-				}
+				posX += 10;
+				map->Reposition(-1);
 			}
 		}
 		spriteBack.setTextureRect(IntRect(posX, 0, 1920, 1080));
-
 		if (player.sprite.getPosition().x > 520) {
-			*state = Engine::MENU;
+			Sleep(100);
+			GiveScript();
+			if (Pyth("py", "multiply", "5", "4") == Pyth("script", "multiply", "5", "4")) {
+				MessageBox(NULL, TEXT("Rozwi¹za³eœ poprawnie zadanie."), TEXT("Gratulacje"), NULL);
+			}
+			else {
+				MessageBox(NULL, TEXT("Tym razem nie uda³o Ci siê rozwi¹zaæ zadania. Próbuj dalej."), TEXT("Ups..."), NULL);
+			}
+			*state = Engine::EXIT;
+
 		}
 		//cout << player.sprite.getPosition().x<<endl;
 
@@ -178,6 +186,52 @@ void Game::Run(int argc, char* argv[])
 		window->draw(wonsz);
 		window->display();
 	}
+}
+
+void Game::GiveScript()
+{
+	fstream script;
+	script.open("script.py", ios::out);
+
+	RenderWindow newWindow;
+	newWindow.create(sf::VideoMode(800, 500), "Type your script here!");
+	newWindow.setPosition(Vector2i(100, 50));
+	newWindow.setFramerateLimit(60);
+
+	Font scriptFont;
+	scriptFont.loadFromFile("Resources/Arial.ttf");
+	std::string output = "#Write script in Python\n#with \"multiply\" function\n#that will multiply 2 given numbers\n#Press End to finish\n\n";
+	Text text(output, scriptFont, 20);
+	text.setPosition(10, 10);
+	text.setStyle(sf::Text::Bold);
+	text.setFillColor(sf::Color::White);
+	Event event;
+	while (!Keyboard::isKeyPressed(Keyboard::End))
+	{
+		while (newWindow.pollEvent(event))
+		{
+			if (event.type == sf::Event::TextEntered)
+			{
+				if (event.text.unicode != 8)
+					output += (char)event.text.unicode;
+				if (event.text.unicode == 8)
+					output = output.substr(0, output.length() - 1);
+				if (event.text.unicode == 13)
+				{
+					output = output.substr(0, output.length() - 1);
+					output += "\n";
+				}
+			}
+		}
+		text.setString(output);
+		newWindow.clear();
+		newWindow.draw(text);
+		newWindow.display();
+	}
+	newWindow.close();
+	script << output;
+	script.flush();
+	script.close();
 }
 
 Game::~Game()

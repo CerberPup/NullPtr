@@ -13,7 +13,7 @@ Player::Player()
 	animation = 0;
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(0, 32, 32, 32));
-	sprite.move(32, 800);
+	sprite.move(263, 800);
 	sprite.setOrigin(16, 0);
 	sprite.setScale(2, 2);
 	velocity = Vector2f(0, 0);

@@ -30,7 +30,7 @@ Menu::~Menu()
 
 void Menu::Run()
 {
-	Text title("There is no title", font, 80);
+	Text title("Zaskroniec", font, 80);
 	title.setStyle(Text::Bold);
 	title.setPosition(size.x / 2 - title.getGlobalBounds().width / 2, 20);
 
