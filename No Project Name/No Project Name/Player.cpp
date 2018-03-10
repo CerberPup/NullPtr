@@ -9,7 +9,7 @@ Player::Player()
 		MessageBox(NULL, TEXT("Textures not found!"), TEXT("ERROR"), NULL);
 		return;
 	}
-	gravity = Vector2f(0, 50.1);
+	gravity = Vector2f(0, 9.81*2);
 	animation = 0;
 	sprite.setTexture(texture);
 	sprite.setTextureRect(IntRect(0, 32, 32, 32));
@@ -35,12 +35,17 @@ void Player::physic(float delta) {
 	if (!onground)
 		velocity.y += gravity.y;
 	float halfScreenY = 19 * 32;
-	if (tmp.y >= halfScreenY) {
-		sprite.setPosition(tmp.x, halfScreenY - 1);
+	if (tmp.y > halfScreenY) {
+		sprite.setPosition(tmp.x, halfScreenY-1);
 		onground = true;
 		velocity.y = 0;
 	}
-	velocity.x += 8 * (velocity.x > 0 ? -1 : 1);
+	if (velocity.x > 1|| velocity.x < -1) {
+		velocity.x += 8 * (velocity.x > 0 ? -1 : 1);
+	}
+	else {
+		velocity.x = 0;
+	}
 	sprite.move(velocity.x*delta, velocity.y*delta);
 }
 

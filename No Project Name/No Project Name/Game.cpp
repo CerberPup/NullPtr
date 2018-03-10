@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <python.h>
+#include <thread>
 
 
 Game::Game(RenderWindow &window, int &state)
@@ -17,6 +18,7 @@ Game::Game(RenderWindow &window, int &state)
 	spriteBack.scale(1.2, 1.3);
 	clockphysic.restart();
 	clock.restart();
+	phys = new thread((&Game::async),this);
 }
 
 long int Game::Pyth(char* file, char* function, char* arg1, char* arg2)
@@ -91,7 +93,17 @@ long int Game::Pyth(char* file, char* function, char* arg1, char* arg2)
 	return 0;
 }
 
-void Game::Run(int argc, char* argv[])
+void Game::async() 
+{
+	while (true) {
+		Time elapsed = clockphysic.getElapsedTime();
+		clockphysic.restart();
+		player.physic(elapsed.asSeconds());
+		Sleep(10);
+	}
+}
+
+void Game::Run()
 {
 	int posX = 0;
 	map = new Map(*window);
@@ -112,7 +124,7 @@ void Game::Run(int argc, char* argv[])
 			if (player.onground) {
 				player.onground = false;
 				player.animation = Player::JUMP;
-				player.velocity.y = -1000;
+				player.velocity.y = -600;
 			}
 		}
 		if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A))
@@ -166,9 +178,7 @@ void Game::Run(int argc, char* argv[])
 		//cout << player.sprite.getPosition().x<<endl;
 
 		//Player rotates 15
-		Time elapsed = clockphysic.getElapsedTime();
-		clockphysic.restart();
-		player.physic(elapsed.asSeconds());
+		
 
 		if (clock.getElapsedTime() > milliseconds(100))
 		{

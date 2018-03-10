@@ -16,7 +16,7 @@ public:
 		EXIT
 	};
 	int state;
-	Engine(int argc, char *argv[]);
+	Engine();
 	
 	~Engine();
 	void run();

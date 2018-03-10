@@ -7,6 +7,7 @@
 #include "Tile.h"
 #include "Player.h"
 #include "Zaskroniec.h"
+#include <thread>
 
 class Game
 {
@@ -17,17 +18,21 @@ private:
 	Texture textBack;
 	Sprite spriteBack;
 	Clock clock;
-	Clock clockphysic;
+	
 	Image image;
-	Player player;
+	
 	vector<Tile*> tiles;
 	Map* map;
 	Vector2f velocity;
 	float delta;
+	thread* phys;
 public:
+	Clock clockphysic;
+	Player player;
 	Game(RenderWindow &window, int &state);
-	void Run(int argc, char* argv[]);
+	void Run();
 	long int Pyth(char* file, char* function, char* arg1, char* arg2);
+	void async();
 	void GiveScript();
 	~Game();
 };
