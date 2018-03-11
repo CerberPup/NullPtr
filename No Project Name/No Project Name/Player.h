@@ -9,6 +9,7 @@ private:
 	Vector2f gravity;
 	Vector2f pos;
 	int animationcounter;
+	int offset;
 	Texture texture;
 	virtual void draw(sf::RenderTarget &target, sf::RenderStates states) const;
 public:
@@ -17,7 +18,7 @@ public:
 	bool onground;
 	Vector2f velocity;
 	enum move {
-		LEFT, RIGHT, JUMP
+		LEFT, RIGHT, JUMP, IDDLE
 	};
 	Sprite sprite;
 	void update();

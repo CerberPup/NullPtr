@@ -18,21 +18,21 @@ private:
 	Texture textBack;
 	Sprite spriteBack;
 	Clock clock;
-	
 	Image image;
-	
+	Clock clockphysic;
+	Player player;
 	vector<Tile*> tiles;
 	Map* map;
 	Vector2f velocity;
 	float delta;
 	thread* phys;
+	thread* animate;
+	void async();
+	void animation();
 public:
-	Clock clockphysic;
-	Player player;
 	Game(RenderWindow &window, int &state);
 	void Run();
 	long int Pyth(char* file, char* function, char* arg1, char* arg2);
-	void async();
 	void GiveScript();
 	~Game();
 };

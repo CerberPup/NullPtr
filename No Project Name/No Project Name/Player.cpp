@@ -52,43 +52,63 @@ void Player::physic(float delta) {
 void Player::update()
 {
 	IntRect tmp = sprite.getTextureRect();
-	if (animation == Player::move::RIGHT) {
-		Vector2f tmp2 = sprite.getScale();
-		if (tmp2.x < 0)
-			tmp2.x = tmp2.x*-1;
-		sprite.setScale(tmp2);
+	switch (animation)
+	{
+	case Player::move::IDDLE:
+		offset = 0;
+		break;
+	case Player::move::RIGHT:
+		{
+			offset = 0;
+			Vector2f tmp2 = sprite.getScale();
+			if (tmp2.x < 0)
+				tmp2.x = tmp2.x*-1;
+			sprite.setScale(tmp2);
+			if (animationcounter == 3) {
+				tmp.left = 0;
+				animationcounter = 0;
+				animation = Player::move::IDDLE;
+			}
+			else {
+				tmp.left += 32;
+				animationcounter++;
+			}
+		}
+		break;
+	case Player::move::LEFT:
+		{
+			offset = 0;
+			Vector2f tmp2 = sprite.getScale();
+			if (tmp2.x > 0)
+				tmp2.x = tmp2.x*-1;
+			sprite.setScale(tmp2);
+			if (animationcounter == 3) {
+				tmp.left = 0;
+				animationcounter = 0;
+				animation = Player::move::IDDLE;
+			}
+			else {
+				tmp.left += 32;
+				animationcounter++;
+			}
+		}
+		break;
+	case Player::move::JUMP:
+		if(animationcounter == 0)
+			tmp.left = 4*32;
 		if (animationcounter == 3) {
 			tmp.left = 0;
 			animationcounter = 0;
+			animation = Player::move::IDDLE;
 		}
 		else {
 			tmp.left += 32;
 			animationcounter++;
 		}
-	}
-	else if (animation == Player::move::LEFT) {
-		Vector2f tmp2 = sprite.getScale();
-		if (tmp2.x > 0)
-			tmp2.x = tmp2.x*-1;
-		sprite.setScale(tmp2);
-		if (animationcounter == 3) {
-			tmp.left = 0;
-			animationcounter = 0;
+		break;
+	default:
+		break;
+		
 		}
-		else {
-			tmp.left += 32;
-			animationcounter++;
-		}
-	}
-	else if (animation == Player::move::JUMP) {
-		if (animationcounter == 3) {
-			tmp.left = 0;
-			animationcounter = 0;
-		}
-		else {
-			tmp.left += 32;
-			animationcounter++;
-		}
-	}
 	sprite.setTextureRect(tmp);
 }

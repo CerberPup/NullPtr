@@ -97,7 +97,7 @@ void Map::Reposition(int side)
 			if (tile != NULL)
 			{
 				position = tile->getPosition();
-				position.x += 10 * side;
+				position.x += 5 * side;
 				tile->setPosition(position);
 			}
 		}

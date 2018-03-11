@@ -17,8 +17,8 @@ Game::Game(RenderWindow &window, int &state)
 	spriteBack.setTexture(textBack);
 	spriteBack.scale(1.2, 1.3);
 	clockphysic.restart();
-	clock.restart();
 	phys = new thread((&Game::async),this);
+	animate = new thread((&Game::animation), this);
 }
 
 long int Game::Pyth(char* file, char* function, char* arg1, char* arg2)
@@ -102,6 +102,15 @@ void Game::async()
 		Sleep(10);
 	}
 }
+void Game::animation()
+{
+	while (true) {
+		wonsz.update();
+		player.update();
+		Sleep(100);
+		cout << "anim" << endl;
+	}
+}
 
 void Game::Run()
 {
@@ -130,13 +139,13 @@ void Game::Run()
 		if (Keyboard::isKeyPressed(Keyboard::Left) || Keyboard::isKeyPressed(Keyboard::A))
 		{
 			if (player.sprite.getPosition().x > 0) {
-			if (player.onground)
+			//if (player.onground)
 			player.animation = Player::LEFT;
-			if (player.velocity.x > -200)
-			player.velocity.x -= 50;
+			/*if (player.velocity.x > -200)
+			player.velocity.x -= 50;*/
 			if (posX > 0)
 			{
-				posX -= 10;
+				posX -= 5;
 				map->Reposition(1);
 			}
 			}
@@ -148,9 +157,9 @@ void Game::Run()
 		if (Keyboard::isKeyPressed(Keyboard::Right) || Keyboard::isKeyPressed(Keyboard::D))
 		{
 			if (player.sprite.getPosition().x < 1300) {
-			if (player.velocity.x < 200)
-			player.velocity.x += 50;
-			if (player.onground)
+			/*if (player.velocity.x < 200)
+			player.velocity.x += 50;*/
+			//if (player.onground)
 			player.animation = Player::RIGHT;
 			}
 			else {
@@ -158,12 +167,12 @@ void Game::Run()
 			}
 			if (posX < 5000)
 			{
-				posX += 10;
+				posX += 5;
 				map->Reposition(-1);
 			}
 		}
 		spriteBack.setTextureRect(IntRect(posX, 0, 1920, 1080));
-		if (player.sprite.getPosition().x > 520) {
+		/*if (player.sprite.getPosition().x > 520) {
 			Sleep(100);
 			GiveScript();
 			if (Pyth("py", "multiply", "5", "4") == Pyth("script", "multiply", "5", "4")) {
@@ -174,18 +183,11 @@ void Game::Run()
 			}
 			*state = Engine::EXIT;
 
-		}
+		}*/
 		//cout << player.sprite.getPosition().x<<endl;
 
 		//Player rotates 15
 		
-
-		if (clock.getElapsedTime() > milliseconds(100))
-		{
-			wonsz.update();
-			player.update();
-			clock.restart();
-		}
 		window->clear();
 
 		window->draw(spriteBack);
